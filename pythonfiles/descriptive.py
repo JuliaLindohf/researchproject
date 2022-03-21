@@ -85,3 +85,41 @@ class sortdataframe:
 
     self.winmean = np.mean(winlist, axis=0)
     self.winsd = np.std(winlist, axis=0)
+    
+    
+class Processdf:  
+  def __init__(self, inputdf): 
+    # to fill NA values with zeroes 
+    newdf = inputdf.fillna(0) 
+    self.df = newdf 
+
+  def fixing_date_column(self): 
+    # to create a list 
+    datecolumn = self.df['Date'].tolist() 
+
+    # to create three empty columns 
+    year = [ ] 
+    month = [ ]
+    day = [ ] 
+
+    for dates in datecolumn: 
+      newdate = datetime.strptime(dates, "%Y-%m-%d") 
+      year.append(newdate.year) 
+      month.append(newdate.month) 
+      day.append(newdate.day) 
+
+    # to create a new dataframe 
+    datedate =list(zip(year, month, day))
+    # Create DataFrame  
+    self.date_df = pd.DataFrame(list(zip(year, month, day)), columns = ['year', 'month', 'day'])  
+  
+  def merge_dataframe(self): 
+    # to merge dataframes, intending to create a new dataframe 
+    self.fixing_date_column()
+
+    # to fetch columns from the original dataframe 
+    originaldf = self.df.iloc[:, 3:]   
+
+    # to merge two dataframes into one 
+    self.newdataframe = pd.concat([self.date_df, originaldf], axis = 1)  
+    
