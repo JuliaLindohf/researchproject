@@ -122,4 +122,18 @@ class Processdf:
 
     # to merge two dataframes into one 
     self.newdataframe = pd.concat([self.date_df, originaldf], axis = 1)  
+
+  def storedata(self, seasonbegin, seasonend): 
+    # to chunk up the data 
+    self.merge_dataframe()
+    temp_dataframe = self.newdataframe 
+    
+    season1_df = temp_dataframe.loc[temp_dataframe['year'].isin([seasonbegin])] 
+
+    season1_df = season1_df[season1_df['month'] > 7]
+
+    season2_df = temp_dataframe.loc[temp_dataframe['year'].isin([seasonend])] 
+    season2_df = season2_df[season2_df['month'] < 8]
+
+    return pd.concat([season1_df, season2_df])
     
